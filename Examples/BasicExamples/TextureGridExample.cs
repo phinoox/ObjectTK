@@ -83,7 +83,7 @@ namespace Examples.BasicExamples
             Camera.ResetToDefault();
         }
 
-        protected virtual void OnRenderFrame(FrameEventArgs frameEventArgs)
+        protected override void OnRenderFrame(FrameEventArgs frameEventArgs)
         {
             // setup stuff
             GL.Viewport(0, 0, Size.X, Size.Y);

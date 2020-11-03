@@ -14,7 +14,7 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace Examples.AdvancedExamples
 {
-    [ExampleProject("Swizzled Parallax Mapping (ported from OpenTK examples)")]
+    [ExampleProject("Swizzled Parallax Mapping (ported from OpenTK examples (requires 2.0))")]
     public class ParallaxMappingExample
         : ExampleWindow
     {
