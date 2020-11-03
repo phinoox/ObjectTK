@@ -50,6 +50,7 @@ namespace ObjectTK.Tools
 
         protected override void OnResize(ResizeEventArgs e)
         {
+            Size = e.Size;
             Logger?.InfoFormat("Window resized to: {0}x{1}", Size.X, Size.Y);
         }
 
