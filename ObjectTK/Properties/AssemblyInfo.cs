@@ -22,7 +22,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("ObjectTK")]
-[assembly: AssemblyDescription("Abstraction layer on top of OpenTK to provide OpenGL features in an object-oriented and type-safe manner with modern C#-style")]
+[assembly: AssemblyDescription("Abstraction layer on top of OpenTK 4 to provide OpenGL features in an object-oriented and type-safe manner with modern C#-style\r\n\r\nhttps://github.com/johnboggess/ObjectTK\r\nForked From: https://github.com/opentk/ObjectTK")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("JcBernack")]
 [assembly: AssemblyProduct("ObjectTK")]
