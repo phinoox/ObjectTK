@@ -26,6 +26,8 @@ namespace ObjectTK.Tools.Cameras
         public float MouseWheelSpeed = 0.1f;
         public float MoveSpeed = 60;
 
+        private float oldMouseWheelOffset = 0;
+
         public Camera()
         {
             State = new CameraState();
@@ -78,7 +80,9 @@ namespace ObjectTK.Tools.Cameras
         
         private void MouseWheelChanged(MouseWheelEventArgs e)
         {
-            Behavior.MouseWheelChanged(State, MouseWheelSpeed * e.OffsetY);//todo: should be delta
+            float delta = e.OffsetY - oldMouseWheelOffset;
+            Behavior.MouseWheelChanged(State, MouseWheelSpeed * delta);
+            oldMouseWheelOffset = e.OffsetY;
         }
 
         /// <summary>
