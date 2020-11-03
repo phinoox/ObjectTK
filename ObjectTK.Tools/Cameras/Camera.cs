@@ -73,7 +73,7 @@ namespace ObjectTK.Tools.Cameras
 
         private void MouseMove(MouseMoveEventArgs e)
         {
-            Behavior.MouseMove(State, MouseMoveSpeed * new Vector2(e.DeltaX, e.DeltaY));
+            Behavior.MouseMove(State, MouseMoveSpeed * new Vector2(-e.DeltaX, -e.DeltaY));
         }
         
         private void MouseWheelChanged(MouseWheelEventArgs e)
