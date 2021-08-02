@@ -19,17 +19,19 @@ namespace ObjectTK
         : GLResource
         , IEquatable<GLObject>
     {
+        protected int _handle;
+
         /// <summary>
         /// The OpenGL handle.
         /// </summary>
-        public readonly int Handle;
+        public int Handle { get => _handle; }
 
         /// <summary>
         /// Initializes a new instance of the GLResource class.
         /// </summary>
         protected GLObject(int handle)
         {
-            Handle = handle;
+            _handle = handle;
         }
 
         public bool Equals(GLObject other)

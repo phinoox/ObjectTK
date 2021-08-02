@@ -13,19 +13,29 @@ using OpenTK.Mathematics;
 
 namespace ObjectTK.Shaders.Variables
 {
+
+    public interface IUniform
+    {
+        public int Location { get; set; }
+        public void TrySetValue(object value);
+        public object GetValue();
+    }
+
+
+
     /// <summary>
     /// Represents a uniform.
     /// </summary>
     /// <typeparam name="T">The type of the uniform.</typeparam>
     public class Uniform<T>
-        : ProgramVariable
+        : ProgramVariable,IUniform
     {
         private static readonly Logging.IObjectTKLogger Logger = Logging.LogFactory.GetLogger(typeof(Uniform<T>));
 
         /// <summary>
         /// The location of the uniform within the shader program.
         /// </summary>
-        public int Location { get; private set; }
+        public int Location { get;  set; }
         
         /// <summary>
         /// Action used to set the uniform.<br/>
@@ -52,6 +62,8 @@ namespace ObjectTK.Shaders.Variables
                 Set(value);
             }
         }
+
+       
 
         internal Uniform()
             : this(UniformSetter.Get<T>())
@@ -81,6 +93,25 @@ namespace ObjectTK.Shaders.Variables
             Program.AssertActive();
             _value = value;
             if (Active) _setter(Location, value);
+        }
+
+        public void TrySetValue(object value)
+        {
+           if(typeof(object) == typeof(T))
+            {
+                Program.AssertActive();
+                _value = (T)value;
+                if (Active) _setter(Location, _value);
+            }
+           else
+            {
+                Logger?.WarnFormat("Could not set uniform value for {0}", Name);
+            }
+        }
+
+        public object GetValue()
+        {
+            return _value;
         }
     }
 }

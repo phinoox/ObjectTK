@@ -30,7 +30,10 @@ namespace ObjectTK.Shaders
         /// </summary>
         public string Name { get { return GetType().Name; } }
 
+        public List<ProgramVariable> Variables { get => _variables; set => _variables = value; }
+
         private List<ProgramVariable> _variables;
+        private List<ProgramVariable> _old_variables;
 
         /// <summary>
         /// Initializes a new program object.
@@ -61,12 +64,77 @@ namespace ObjectTK.Shaders
             }
         }
 
+        private void ReinitializeShaderVariables()
+        {
+            foreach(var _shader_var in _variables)
+            {
+                PropertyInfo nfo = this.GetType().GetProperty(_shader_var.Name);
+                _shader_var.Initialize(this, nfo);
+            }
+            return;
+            const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public;
+            _variables = new List<ProgramVariable>();
+
+            foreach (var property in GetType().GetProperties(flags).Where(_ => typeof(ProgramVariable).IsAssignableFrom(_.PropertyType)))
+            {
+                var instance = (ProgramVariable)Activator.CreateInstance(property.PropertyType, true);
+                instance.Initialize(this, property);
+                property.SetValue(this, instance, null);
+                _variables.Add(instance);
+            }
+
+            
+        }
+
         /// <summary>
         /// Activate the program.
         /// </summary>
         public void Use()
         {
             GL.UseProgram(Handle);
+        }
+
+        /// <summary>
+        /// retrieves a new shader progamm handle from gl
+        /// Should only be called by the programm factory
+        /// RestoreUniforms should get called after succesfull recompilation
+        /// </summary>
+        public void Recreate()
+        {
+            Logger?.InfoFormat("Recreating shader program {0}", Name);
+            _old_variables = _variables;
+            GL.DeleteProgram(Handle);
+            _handle = GL.CreateProgram();
+            
+            InitializeShaderVariables();
+            
+            
+        }
+
+        /// <summary>
+        /// saves a backup of the current uniform variables
+        /// </summary>
+        public void BackupUniforms()
+        {
+            _old_variables = _variables;
+        }
+
+        /// <summary>
+        /// tries to restore old uniforms previously saved with BackupUniforms or Recreate
+        /// </summary>
+        public void RestoreUniforms()
+        {
+            if (_old_variables == null)
+                return;
+            this.Use();
+            foreach (var oldVar in _old_variables.Where(x => x.GetType().GetInterface("IUniform") != null))
+            {
+                var old_uniform = oldVar as IUniform;
+                var new_uniform = GetType().GetProperty(oldVar.Name).GetValue(this) as IUniform;
+                new_uniform.GetType().GetProperty("Value").SetValue(new_uniform, oldVar.GetType().GetProperty("Value").GetValue(old_uniform));// TrySetValue(old_uniform.GetValue());
+
+            }
+
         }
 
         /// <summary>
