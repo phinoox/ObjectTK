@@ -2,13 +2,19 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <OutputType>Library</OutputType>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Platforms>AnyCPU;x64;x86</Platforms>
     <PackageReleaseNotes></PackageReleaseNotes>
-    <PackageId>ObjectTK-JB</PackageId>
-    <Authors>John Boggess</Authors>
-    <PackageProjectUrl>https://github.com/johnboggess/ObjectTK</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/johnboggess/ObjectTK</RepositoryUrl>
+    <PackageId>ObjectTK-Tk4</PackageId>
+    <Version>1.0.4.15</Version>
+    <AssemblyVersion>1.0.4.2</AssemblyVersion>
+    <FileVersion>1.0.4.2</FileVersion>
+    <Authors>phinoox</Authors>
+    <PackageProjectUrl></PackageProjectUrl>
+    <RepositoryUrl></RepositoryUrl>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>opentk</PackageTags>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DocumentationFile>bin\Debug\ObjectTK.xml</DocumentationFile>
@@ -30,7 +36,13 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="log4net" Version="2.0.12" />
-    <PackageReference Include="OpenTK" Version="4.0.6" />
-    <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
+    <PackageReference Include="OpenTK" Version="4.6.4" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Target Name="NugetAdd" AfterTargets="Pack">
+    <Exec Command="nuget.exe add bin\$(Configuration)\$(PackageId).$(PackageVersion).nupkg -Source D:\Dev\csharp\Nuget-Feed-Local\" />
+  </Target>
 </Project>
